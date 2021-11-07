@@ -16,3 +16,9 @@ header h1 {
     flex-direction: column;
     flex-wrap: nowrap;
 }
+
+#location-form {
+    display: flex;
+    flex-direction: column;
+    
+}
