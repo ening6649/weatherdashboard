@@ -1,32 +1,35 @@
 let LocationInputEl = document.querySelector("#location");
-let LocationFormEl = document.querySelector('#location-form')
+let LocationFormEl = document.querySelector('#location-form');
+let historyDivEl = document.querySelector('#history')
 
 LocationInputEl.placeholder = "enter a city ";
 let formSubmitHandler = function(event) {
     event.preventDefault();
     let location = LocationInputEl.value.trim();
     console.log(location)
+    // saveCity();
+    createHistory();
     getWeather(location);
+    // LocationInputEl.value = ''; 
+    // console.log(location)
     // return location; 
 }
-
-var getWeather = function(location) {
+// ??? why is this city variable working ??
+var getWeather = function(city) {
     // format the github api url
     // var apiUrl = "https://api.github.com/users/" + user + "/repos";
     // 'https://api.openweathermap.org/data/2.5/weather?q=Chicago&appid=78f0fb365d40d76ade73efbcbef1c0aa'
-
-    let locationUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + location +'&appid=78f0fb365d40d76ade73efbcbef1c0aa'
+   
+    let locationUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=78f0fb365d40d76ade73efbcbef1c0aa'
     // var apiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid=78f0fb365d40d76ade73efbcbef1c0aa'
     // temp, wind and humidity
-  
+    console.log(city);
     // make a request to the url
     fetch(locationUrl)
         .then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
                 // displayRepos(data, user);
-                console.log(data)
-                console.log(data.coord.lon)
                 let longitude = data.coord.lon;
                 let latitude = data.coord.lat;
                 let coordUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +latitude + '&lon='+longitude+'&exclude=minutely,hourly&appid=78f0fb365d40d76ade73efbcbef1c0aa'
@@ -53,10 +56,47 @@ var getWeather = function(location) {
 
 
 
+let createHistory = function() {
+    let listHistoryEl = document.createElement('ul');
+    let listItemEl = document.createElement('li');
+    historyDivEl.appendChild(listHistoryEl);
+    listHistoryEl.appendChild(listItemEl)
+    // listHistoryEl.textContent = location; 
+    console.log (location)
+    var queryString = document.location.search;
+    console.log(document.location.search)
+    let savedName = queryString.split("=")[1];
+    listItemEl.textContent = savedName;
+    console.log(savedName)
+
+}
+
+// let saveCity = function(){
+//     console.log('this fired')
+//     let savedCityArr = [];
+//     savedCityArr.push(location);
+    
+//     for (let i = 0; i < savedCityArr.length; i++) {
+//         // if ()
+//         // savedCityArr.push(city[i]); 
+      
+//         let savedCityEl = document.createElement('p');
+//         savedCityEl.textContent= savedCityArr[i];
+//         searchHistoryEl.appendChild(savedCityEl);
+        
+//         console.log('fired')
+
+        
+//     }
+//     localStorage.setItem('histroy', JSON.stringify(savedCityArr));
+// }
+
+let displayWeather = function(data){
+    
+}
 
 
-
- LocationFormEl.addEventListener("click", formSubmitHandler);
+ LocationFormEl.addEventListener("submit", formSubmitHandler);
 
 
 
