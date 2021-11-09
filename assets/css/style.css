@@ -22,3 +22,18 @@ header h1 {
     flex-direction: column;
     
 }
+
+.weather {
+    display: flex;
+    flex-direction: column;
+}
+
+.current {
+    width: 100%;
+}
+
+.forecast {
+    display: flex;
+    justify-content: space-around;
+}
+

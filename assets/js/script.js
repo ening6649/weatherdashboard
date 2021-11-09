@@ -1,19 +1,9 @@
 let LocationInputEl = document.querySelector("#location");
 let LocationFormEl = document.querySelector('#location-form');
 let historyDivEl = document.querySelector('#history')
+let conditionsEl = document.querySelector('#weather')
 
-LocationInputEl.placeholder = "enter a city ";
-let formSubmitHandler = function(event) {
-    event.preventDefault();
-    let location = LocationInputEl.value.trim();
-    console.log(location)
-    // saveCity();
-    createHistory();
-    getWeather(location);
-    // LocationInputEl.value = ''; 
-    // console.log(location)
-    // return location; 
-}
+
 // ??? why is this city variable working ??
 var getWeather = function(city) {
     // format the github api url
@@ -37,7 +27,7 @@ var getWeather = function(city) {
                     .then(function(response){
                         response.json().then(function(data){
                             console.log(data);
-                            // displayWeather(data); 
+                            displayWeather(data.daily); 
                         })
                     })
                     .catch(function(error){
@@ -54,45 +44,66 @@ var getWeather = function(city) {
         });
 };
 
-
-
-let createHistory = function() {
-    let listHistoryEl = document.createElement('ul');
-    let listItemEl = document.createElement('li');
-    historyDivEl.appendChild(listHistoryEl);
-    listHistoryEl.appendChild(listItemEl)
-    // listHistoryEl.textContent = location; 
-    console.log (location)
-    var queryString = document.location.search;
-    console.log(document.location.search)
-    let savedName = queryString.split("=")[1];
-    listItemEl.textContent = savedName;
-    console.log(savedName)
-
+LocationInputEl.placeholder = "enter a city ";
+let formSubmitHandler = function(event) {
+    event.preventDefault();
+    let location = LocationInputEl.value.trim();
+    console.log(location)
+    saveCity();
+    // createHistory();
+    getWeather(location);
+    LocationInputEl.textContent = ''; 
+    console.log(location)
+    // return location; 
 }
 
-// let saveCity = function(){
-//     console.log('this fired')
-//     let savedCityArr = [];
-//     savedCityArr.push(location);
-    
-//     for (let i = 0; i < savedCityArr.length; i++) {
-//         // if ()
-//         // savedCityArr.push(city[i]); 
-      
-//         let savedCityEl = document.createElement('p');
-//         savedCityEl.textContent= savedCityArr[i];
-//         searchHistoryEl.appendChild(savedCityEl);
-        
-//         console.log('fired')
+// let createHistory = function(location) {
+//     let listHistoryEl = document.createElement('ul');
+//     let listItemEl = document.createElement('li');
+//     historyDivEl.appendChild(listHistoryEl);
+//     listHistoryEl.appendChild(listItemEl)
+//     // listHistoryEl.textContent = location; 
+//     console.log (location)
+//     var queryString = document.location.search;
+//     console.log(document.location.search)
+//     let savedName = queryString.split("=")[1];
+//     listItemEl.textContent = savedName;
+//     console.log(savedName)
 
-        
-//     }
-//     localStorage.setItem('histroy', JSON.stringify(savedCityArr));
 // }
 
-let displayWeather = function(data){
+let saveCity = function(){
+    console.log('this fired')
+    let savedCityArr = [];
+    savedCityArr.push(location);
     
+    for (let i = 0; i < savedCityArr.length; i++) {
+        // if ()
+        // savedCityArr.push(city[i]); 
+      
+        let savedCityEl = document.createElement('p');
+        savedCityEl.textContent= savedCityArr[i];
+        historyDivEl.appendChild(savedCityEl);
+        console.log(location)
+        console.log('fired')
+
+        
+    }
+    localStorage.setItem('histroy', JSON.stringify(savedCityArr));
+}
+
+let displayWeather = function(data){
+    console.log(data.current)
+    // console.log(data)
+    for (let i = 0; i < 5; i++) {
+        let dailyEl = data[i] 
+        console.log (data[i])
+        let forecastEl = document.createElement('div');
+        conditionsEl.appendChild(forecastEl);
+        forecastEl.textContent = dailyEl.temp.day
+        // console.log(dailyEl.temp.day)
+    }
+
 }
 
 
