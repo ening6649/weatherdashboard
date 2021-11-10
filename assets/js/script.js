@@ -127,14 +127,14 @@ console.log(current.weather[0].icon);
     currentIconEl.textContent = current.weather[0].description;
     // let forecastClearEl = document.createElement('div');
     // forecastDivEl.replaceWith(forecastClearEl);
-   let removeThisEl = document.getElementById('remove')
-    if (removeThisEl) {
-    forecastDivEl.remove(forecastUlEl);
-    console.log('forecast fire')
-    
+ 
+    for (let i = 0; i < 5; i++) {
+       removeforecast();
+        
     }
-    
    
+  
+    
     for (let i = 0; i < 5; i++) {
         let daily = data[i] 
         // let newforecastLi1El = moment().add(1,'d');
@@ -161,9 +161,18 @@ console.log(current.weather[0].icon);
         forecastLi4El.textContent = daily.wind_speed;
         forecastLi5El.textContent = daily.humidity;
     }
+    
      
 }
 
+let removeforecast = function () {
+    let removeThisEl = document.querySelector('#remove')
+    //         removeThisEl.remove();
+        if (removeThisEl) {
+    //         console.log('fasdfdf')
+        removeThisEl.remove();
+        }
+}
 
  LocationFormEl.addEventListener("submit", formSubmitHandler);
 
