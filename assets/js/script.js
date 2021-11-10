@@ -2,9 +2,11 @@ let LocationInputEl = document.querySelector("#location");
 let LocationFormEl = document.querySelector('#location-form');
 let historyDivEl = document.querySelector('#history')
 let conditionsEl = document.querySelector('#weather')
+let currentEl = document.querySelector('#current')
+let forecastEl = document.querySelector('#forecast')
 
 
-// ??? why is this city variable working ??
+
 var getWeather = function(city) {
     // format the github api url
     // var apiUrl = "https://api.github.com/users/" + user + "/repos";
@@ -13,8 +15,6 @@ var getWeather = function(city) {
     let locationUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=78f0fb365d40d76ade73efbcbef1c0aa'
     // var apiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid=78f0fb365d40d76ade73efbcbef1c0aa'
     // temp, wind and humidity
-    console.log(city);
-    // make a request to the url
     fetch(locationUrl)
         .then(function(response) {
         if (response.ok) {
@@ -27,7 +27,8 @@ var getWeather = function(city) {
                     .then(function(response){
                         response.json().then(function(data){
                             console.log(data);
-                            displayWeather(data.daily); 
+                            displayWeather(data,data.daily,data.current); 
+                            
                         })
                     })
                     .catch(function(error){
@@ -38,18 +39,14 @@ var getWeather = function(city) {
                 alert("Error: Location Not Found");
             }
         })
-        .catch(function(error) {
-            console.log(error);
-            alert("Unable to connect to OpenWeather");
-        });
+    
 };
 
 LocationInputEl.placeholder = "enter a city ";
 let formSubmitHandler = function(event) {
     event.preventDefault();
     let location = LocationInputEl.value.trim();
-    console.log(location)
-    saveCity();
+    saveCity(location);
     // createHistory();
     getWeather(location);
     LocationInputEl.textContent = ''; 
@@ -72,7 +69,7 @@ let formSubmitHandler = function(event) {
 
 // }
 
-let saveCity = function(){
+let saveCity = function(location){
     console.log('this fired')
     let savedCityArr = [];
     savedCityArr.push(location);
@@ -92,18 +89,79 @@ let saveCity = function(){
     localStorage.setItem('histroy', JSON.stringify(savedCityArr));
 }
 
-let displayWeather = function(data){
-    console.log(data.current)
-    // console.log(data)
-    for (let i = 0; i < 5; i++) {
-        let dailyEl = data[i] 
-        console.log (data[i])
-        let forecastEl = document.createElement('div');
-        conditionsEl.appendChild(forecastEl);
-        forecastEl.textContent = dailyEl.temp.day
-        // console.log(dailyEl.temp.day)
-    }
+// current display
+let currentCityEl= document.createElement('h2')
+let currentDateEl = document.createElement('span')
+let currentIconEl = document.createElement('span')
+let currentUlEl = document.createElement('ul');
+let currentTemp = document.createElement('li');
+let currentWind = document.createElement('li');
+let currentHumidity = document.createElement('li');
+let currentUv =document.createElement('li');
+currentEl.appendChild(currentCityEl);
+currentEl.appendChild(currentDateEl);
+currentEl.appendChild(currentIconEl);
+currentEl.appendChild(currentUlEl);
+currentUlEl.appendChild(currentTemp);
+currentUlEl.appendChild(currentWind);
+currentUlEl.appendChild(currentHumidity);
+currentUlEl.appendChild(currentUv);
+currentUlEl.id ='currentlist';
 
+// forecast display
+
+
+
+
+let displayWeather = function(name,data, current){
+    // console.log(name.timezone);
+console.log(current.weather[0].icon);
+// console.log(moment().format('dddd,MMM DD'))
+    currentTemp.textContent = 'temp: ' + current.temp;
+    currentWind.textContent = 'wind: ' +current.wind_speed;
+    currentHumidity.textContent = 'humidity: ' +current.humidity +'%';
+    currentUv.textContent = 'UV Index: ' + current.uvi;
+    
+    currentCityEl.textContent = name.timezone;
+    currentDateEl.textContent = moment().format('dddd,MMM DD')
+    currentIconEl.textContent = current.weather[0].description;
+    // let forecastClearEl = document.createElement('div');
+    // forecastDivEl.replaceWith(forecastClearEl);
+   let removeThisEl = document.getElementById('remove')
+    if (removeThisEl) {
+    forecastDivEl.remove(forecastUlEl);
+    console.log('forecast fire')
+    
+    }
+    
+   
+    for (let i = 0; i < 5; i++) {
+        let daily = data[i] 
+        // let newforecastLi1El = moment().add(1,'d');
+        // let newforecastLi2El = daily.temp.day
+        // // forecastLi1El.replaceWith(newforecastLi1El)
+        // forecastLi2El.replaceWith(newforecastLi2El)
+        // // console.log(dailyEl.temp.day)
+        var forecastDivEl = document.createElement('div');
+        forecastDivEl.id = 'remove'
+        var forecastUlEl = document.createElement('ul')
+        forecastEl.appendChild(forecastDivEl);
+        forecastDivEl.appendChild(forecastUlEl);
+        var forecastLi1El = document.createElement('li');
+        forecastUlEl.appendChild(forecastLi1El);
+        var forecastLi2El = document.createElement('li');
+        forecastUlEl.appendChild(forecastLi2El);
+        var forecastLi3El = document.createElement('li');
+        forecastUlEl.appendChild(forecastLi3El);
+        var forecastLi4El = document.createElement('li');
+        forecastUlEl.appendChild(forecastLi4El);
+        var forecastLi5El = document.createElement('li');
+        forecastUlEl.appendChild(forecastLi5El);
+        forecastLi3El.textContent = daily.temp.day;
+        forecastLi4El.textContent = daily.wind_speed;
+        forecastLi5El.textContent = daily.humidity;
+    }
+     
 }
 
 

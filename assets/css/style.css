@@ -32,6 +32,10 @@ header h1 {
     width: 100%;
 }
 
+#currentlist {
+    list-style: none;
+}
+
 .forecast {
     display: flex;
     justify-content: space-around;
