@@ -27,7 +27,7 @@ var getWeather = function(city) {
                     .then(function(response){
                         response.json().then(function(data){
                             console.log(data);
-                            displayWeather(data,data.daily,data.current); 
+                            displayWeather(data.daily,data.current); 
                             
                         })
                     })
@@ -89,7 +89,7 @@ let saveCity = function(location){
     localStorage.setItem('histroy', JSON.stringify(savedCityArr));
 }
 
-// current display
+// current weather display
 let currentCityEl= document.createElement('h2')
 let currentDateEl = document.createElement('span')
 let currentIconEl = document.createElement('span')
@@ -108,40 +108,29 @@ currentUlEl.appendChild(currentHumidity);
 currentUlEl.appendChild(currentUv);
 currentUlEl.id ='currentlist';
 
-// forecast display
 
 
 
 
-let displayWeather = function(name,data, current){
-    // console.log(name.timezone);
+// forecast weather display
+let displayWeather = function(data, current){
+
 console.log(current.weather[0].icon);
-// console.log(moment().format('dddd,MMM DD'))
+
     currentTemp.textContent = 'temp: ' + current.temp;
     currentWind.textContent = 'wind: ' +current.wind_speed;
     currentHumidity.textContent = 'humidity: ' +current.humidity +'%';
     currentUv.textContent = 'UV Index: ' + current.uvi;
-    
-    currentCityEl.textContent = name.timezone;
+    currentCityEl.textContent = LocationInputEl.value.trim();
     currentDateEl.textContent = moment().format('dddd,MMM DD')
     currentIconEl.textContent = current.weather[0].description;
-    // let forecastClearEl = document.createElement('div');
-    // forecastDivEl.replaceWith(forecastClearEl);
- 
+   
     for (let i = 0; i < 5; i++) {
        removeforecast();
-        
     }
    
-  
-    
     for (let i = 0; i < 5; i++) {
         let daily = data[i] 
-        // let newforecastLi1El = moment().add(1,'d');
-        // let newforecastLi2El = daily.temp.day
-        // // forecastLi1El.replaceWith(newforecastLi1El)
-        // forecastLi2El.replaceWith(newforecastLi2El)
-        // // console.log(dailyEl.temp.day)
         var forecastDivEl = document.createElement('div');
         forecastDivEl.id = 'remove'
         var forecastUlEl = document.createElement('ul')
@@ -157,6 +146,9 @@ console.log(current.weather[0].icon);
         forecastUlEl.appendChild(forecastLi4El);
         var forecastLi5El = document.createElement('li');
         forecastUlEl.appendChild(forecastLi5El);
+        let date = moment();
+        forecastLi1El.textContent = date.add(i+1,'d').format('dddd,MMM DD')
+        forecastLi2El.textContent = "placeholder"
         forecastLi3El.textContent = daily.temp.day;
         forecastLi4El.textContent = daily.wind_speed;
         forecastLi5El.textContent = daily.humidity;
@@ -167,11 +159,9 @@ console.log(current.weather[0].icon);
 
 let removeforecast = function () {
     let removeThisEl = document.querySelector('#remove')
-    //         removeThisEl.remove();
-        if (removeThisEl) {
-    //         console.log('fasdfdf')
+    if (removeThisEl) {
         removeThisEl.remove();
-        }
+    }
 }
 
  LocationFormEl.addEventListener("submit", formSubmitHandler);
