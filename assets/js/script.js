@@ -1,4 +1,4 @@
-let LocationInputEl = document.querySelector("#location");
+var LocationInputEl = document.querySelector("#location");
 let LocationFormEl = document.querySelector('#location-form');
 let historyDivEl = document.querySelector('#history')
 let conditionsEl = document.querySelector('#weather')
@@ -8,13 +8,7 @@ let forecastEl = document.querySelector('#forecast')
 
 
 var getWeather = function(city) {
-    // format the github api url
-    // var apiUrl = "https://api.github.com/users/" + user + "/repos";
-    // 'https://api.openweathermap.org/data/2.5/weather?q=Chicago&appid=78f0fb365d40d76ade73efbcbef1c0aa'
-   
     let locationUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=78f0fb365d40d76ade73efbcbef1c0aa'
-    // var apiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid=78f0fb365d40d76ade73efbcbef1c0aa'
-    // temp, wind and humidity
     fetch(locationUrl)
         .then(function(response) {
         if (response.ok) {
@@ -47,11 +41,12 @@ let formSubmitHandler = function(event) {
     event.preventDefault();
     let location = LocationInputEl.value.trim();
     saveCity(location);
-    // createHistory();
+   
     getWeather(location);
-    LocationInputEl.textContent = ''; 
+    // why is this .value not .content ?
+    // LocationInputEl.value = ''; 
     console.log(location)
-    // return location; 
+  
 }
 
 // let createHistory = function(location) {
@@ -68,31 +63,38 @@ let formSubmitHandler = function(event) {
 //     console.log(savedName)
 
 // }
+let savedCityArr = [];
+let loadCity = function() {
+    
+    let savedCity = JSON.parse(localStorage.getItem('history'))
+
+    if (!savedCity) {
+        return false;
+    }   
+
+    console.log('saved fired again')
+    console.log(savedCity);
+    console.log(savedCityArr)
+    savedCityArr = savedCity;
+    
+}
+loadCity();
 
 let saveCity = function(location){
     console.log('this fired')
-    let savedCityArr = [];
-    savedCityArr.push(location);
     
-    for (let i = 0; i < savedCityArr.length; i++) {
-        // if ()
-        // savedCityArr.push(city[i]); 
-      
-        let savedCityEl = document.createElement('p');
-        savedCityEl.textContent= savedCityArr[i];
-        historyDivEl.appendChild(savedCityEl);
-        console.log(location)
-        console.log('fired')
-
-        
-    }
-    localStorage.setItem('histroy', JSON.stringify(savedCityArr));
+    savedCityArr.push(location);
+    localStorage.setItem('history', JSON.stringify(savedCityArr));
+    
 }
+
+
+
 
 // current weather display
 let currentCityEl= document.createElement('h2')
-let currentDateEl = document.createElement('span')
-let currentIconEl = document.createElement('span')
+let currentDateEl = document.createElement('h2')
+let currentIconEl = document.createElement('h2')
 let currentUlEl = document.createElement('ul');
 let currentTemp = document.createElement('li');
 let currentWind = document.createElement('li');
@@ -115,15 +117,15 @@ currentUlEl.id ='currentlist';
 // forecast weather display
 let displayWeather = function(data, current){
 
-console.log(current.weather[0].icon);
+
 
     currentTemp.textContent = 'temp: ' + current.temp;
     currentWind.textContent = 'wind: ' +current.wind_speed;
     currentHumidity.textContent = 'humidity: ' +current.humidity +'%';
     currentUv.textContent = 'UV Index: ' + current.uvi;
-    currentCityEl.textContent = LocationInputEl.value.trim();
+    currentCityEl.textContent = LocationInputEl.value.trim()
     currentDateEl.textContent = moment().format('dddd,MMM DD')
-    currentIconEl.textContent = current.weather[0].description;
+    currentIconEl.innerHTML = `<img src= 'http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png'>`
    
     for (let i = 0; i < 5; i++) {
        removeforecast();
@@ -134,6 +136,7 @@ console.log(current.weather[0].icon);
         var forecastDivEl = document.createElement('div');
         forecastDivEl.id = 'remove'
         var forecastUlEl = document.createElement('ul')
+        forecastUlEl.id = 'forecast-card'
         forecastEl.appendChild(forecastDivEl);
         forecastDivEl.appendChild(forecastUlEl);
         var forecastLi1El = document.createElement('li');
@@ -148,7 +151,7 @@ console.log(current.weather[0].icon);
         forecastUlEl.appendChild(forecastLi5El);
         let date = moment();
         forecastLi1El.textContent = date.add(i+1,'d').format('dddd,MMM DD')
-        forecastLi2El.textContent = "placeholder"
+        forecastLi2El.innerHTML = `<img src= 'http://openweathermap.org/img/wn/${daily.weather[0].icon}@2x.png'>`
         forecastLi3El.textContent = daily.temp.day;
         forecastLi4El.textContent = daily.wind_speed;
         forecastLi5El.textContent = daily.humidity;
@@ -164,30 +167,27 @@ let removeforecast = function () {
     }
 }
 
- LocationFormEl.addEventListener("submit", formSubmitHandler);
 
+let createCity = function() {
+    for (let i = 0; i < savedCityArr.length; i++) {
+        let savedCityEl = document.createElement('button');
+        savedCityEl.textContent= savedCityArr[i];
+        historyDivEl.appendChild(savedCityEl);
+      
+    }
+}
+    
+createCity();
 
-
-
-// var userFormEl = document.querySelector("#location-form");
-// var LocationInputEl = document.querySelector("#location");
-// LocationInputEl.placeholder = "enter a city ";
-// var formSubmitHandler = function(event) {
+// let histroyHandler = function(event) {
 //     event.preventDefault();
-//     // get value from input element
-//     var location = LocationInputEl.value.trim();
-//     console.log(location)
+//     console.log(event);
+// }
 
-//     if (location) {
-//         getUserRepos(username);
-//         // LocationInputEl.value = "";
-//     } else {
-//         alert("Please enter a city");
-//     }
-//     console.log(event)
-//   };
 
- 
+// historyDivEl.addEventListener('click', histroyHandler)
+LocationFormEl.addEventListener("submit", formSubmitHandler);
+
 
 //   var displayRepos = function(repos, searchTerm) {
     
@@ -230,16 +230,3 @@ let removeforecast = function () {
 //         repoContainerEl.appendChild(repoEl);
 //     }
 // }; 
-// // getFeaturedRepos("javascript"); to see the reponse object
-// var getFeaturedRepos= function(language) {
-//     var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
-//     fetch(apiUrl).then(function(response) {
-//         if (response.ok) {
-//           response.json().then(function(data) {
-//             displayRepos(data.items, language);
-//           });
-//         } else {
-//           alert('Error: GitHub User Not Found');
-//         }
-//     });
-// }
