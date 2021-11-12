@@ -16,7 +16,7 @@ var getWeather = function(city) {
                 // displayRepos(data, user);
                 let longitude = data.coord.lon;
                 let latitude = data.coord.lat;
-                let coordUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +latitude + '&lon='+longitude+'&exclude=minutely,hourly&appid=78f0fb365d40d76ade73efbcbef1c0aa'
+                let coordUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' +latitude + '&lon='+longitude+'&exclude=minutely,hourly&units=imperial&appid=78f0fb365d40d76ade73efbcbef1c0aa'
                 fetch (coordUrl)
                     .then(function(response){
                         response.json().then(function(data){
@@ -43,10 +43,9 @@ let formSubmitHandler = function(event) {
     saveCity(location);
    
     getWeather(location);
-    // why is this .value not .content ?
-    // LocationInputEl.value = ''; 
+    createCity()
     console.log(location)
-  
+    
 }
 
 // let createHistory = function(location) {
@@ -93,6 +92,7 @@ let saveCity = function(location){
 
 // current weather display
 let currentCityEl= document.createElement('h2')
+
 let currentDateEl = document.createElement('h2')
 let currentIconEl = document.createElement('h2')
 let currentUlEl = document.createElement('ul');
@@ -101,6 +101,7 @@ let currentWind = document.createElement('li');
 let currentHumidity = document.createElement('li');
 let currentUv =document.createElement('li');
 currentEl.appendChild(currentCityEl);
+
 currentEl.appendChild(currentDateEl);
 currentEl.appendChild(currentIconEl);
 currentEl.appendChild(currentUlEl);
@@ -109,9 +110,14 @@ currentUlEl.appendChild(currentWind);
 currentUlEl.appendChild(currentHumidity);
 currentUlEl.appendChild(currentUv);
 currentUlEl.id ='currentlist';
+currentUv.id ='uv'
+if (currentUv>1){
+    currentUv.setAttribute('style','background-color:rgb(190, 149, 115)')
+} else {
+    currentUv.setAttribute('style','background-color:rgb(124, 196, 139)')
+}
 
-
-
+// listEl.setAttribute("style","background-color:#333;padding:20px;");
 
 
 // forecast weather display
@@ -119,9 +125,9 @@ let displayWeather = function(data, current){
 
 
 
-    currentTemp.textContent = 'temp: ' + current.temp;
-    currentWind.textContent = 'wind: ' +current.wind_speed;
-    currentHumidity.textContent = 'humidity: ' +current.humidity +'%';
+    currentTemp.textContent = 'Temp: ' + current.temp + ' F';
+    currentWind.textContent = 'Wind: ' +current.wind_speed + ' MPH';
+    currentHumidity.textContent = 'Humidity: ' +current.humidity +'%';
     currentUv.textContent = 'UV Index: ' + current.uvi;
     currentCityEl.textContent = LocationInputEl.value.trim()
     currentDateEl.textContent = moment().format('dddd,MMM DD')
@@ -152,9 +158,9 @@ let displayWeather = function(data, current){
         let date = moment();
         forecastLi1El.textContent = date.add(i+1,'d').format('dddd,MMM DD')
         forecastLi2El.innerHTML = `<img src= 'http://openweathermap.org/img/wn/${daily.weather[0].icon}@2x.png'>`
-        forecastLi3El.textContent = daily.temp.day;
-        forecastLi4El.textContent = daily.wind_speed;
-        forecastLi5El.textContent = daily.humidity;
+        forecastLi3El.textContent = 'Temp:' + daily.temp.day + ' F';
+        forecastLi4El.textContent = 'Wind:' + daily.wind_speed + ' MPH';
+        forecastLi5El.textContent = 'Humidity:' +daily.humidity + ' %';
     }
     
      
@@ -169,64 +175,26 @@ let removeforecast = function () {
 
 
 let createCity = function() {
+    historyDivEl.innerHTML='';
     for (let i = 0; i < savedCityArr.length; i++) {
         let savedCityEl = document.createElement('button');
+        savedCityEl.id ='savedbtn'
         savedCityEl.textContent= savedCityArr[i];
         historyDivEl.appendChild(savedCityEl);
-      
+      console.log('history fired')
     }
 }
     
 createCity();
 
-// let histroyHandler = function(event) {
-//     event.preventDefault();
-//     console.log(event);
-// }
+let histroyHandler = function(event) {
+    event.preventDefault();
+    console.log(event);
+}
 
 
-// historyDivEl.addEventListener('click', histroyHandler)
+historyDivEl.addEventListener('click', histroyHandler)
 LocationFormEl.addEventListener("submit", formSubmitHandler);
 
 
-//   var displayRepos = function(repos, searchTerm) {
-    
-//     // clear old content
-//     repoContainerEl.textContent = "";
-//     repoSearchTerm.textContent = searchTerm;
-//     // the following block displays repos
-//     // loop over repos
-//     for (var i = 0; i < repos.length; i++) {
-//         // format repo name
-//         var repoName = repos[i].owner.login + "/" + repos[i].name;
-  
-//         // create a container for each repo
-//         var repoEl = document.createElement("a");
-//         repoEl.classList = "list-item flex-row justify-space-between align-center";
-       
-//         // create a span element to hold repository name
-//         var titleEl = document.createElement("span");
-//         titleEl.textContent = repoName;
-  
-//         // append to container
-//         repoEl.appendChild(titleEl);
-  
-//         // create a status element
-//         var statusEl = document.createElement("span");
-//         statusEl.classList = "flex-row align-center";
 
-//         // check if current repo has issues or not
-//         if (repos[i].open_issues_count > 0) {
-//         statusEl.innerHTML =
-//             "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + " issue(s)";
-//         } else {
-//         statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-//         }
-
-//         // append to container
-//         repoEl.appendChild(statusEl);
-
-//         // append container to the dom
-//         repoContainerEl.appendChild(repoEl);
-//     }
-// }; 
