@@ -20,4 +20,4 @@
 * the search will be displayed in search history
 * when click will show that city again / in progress
 ## Link to my website  https://ening6649.github.io/weatherdashboard/
-## screenshot  <img src="./assets/images/weatherdashboard.png   " alt= "ScreenShot" 
+## screenshot  <img src="./assets/images/weatherdashboard.png" alt= "ScreenShot"/>
