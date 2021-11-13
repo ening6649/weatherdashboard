@@ -1,21 +1,23 @@
-# Work Day Scheduler
-## This is a daily planner 
-* this page will manage tasks saved to a daily planner
-## current day display
-* the planner will display a calendar 
-* the calendar is displayed at the top
-* the current day is displayed at the top
-## Time blocks
-* Time blocks for standard business hours are displayed from 9 am to 5 pm
-* each hour is a seperate block
-## Color coded 
-* each time block is color coded 
-* each color code indicate whether the block is in the past, present or future
-* the color code is updated in real time 
-## save an event 
-* when a block is click , an event can be entered
-* when the saved button is click, that event for the time block is saved to local storage
-## persistence
-* when the page is refreshed, the saved event will be loaded from local storage
+# Weather Dashboard
+## This is a weather outlook for multiple cities
+* this page will check weather outlook for cities 
+* a trip maybe planned accordingly 
+## current conditions
+* a user will be able to search for a city 
+* the page will show current weather conditions for the city 
+* the page will show the future conditions for the city 
+## Presentation
+* when a user views the current weather conditions, that city will be shown
+* the city show includes name, date, icon, representing conditions such as temperature, humidity, wind speed and UV index
+## UV index
+* the uv index is presented with a color 
+* the color represents whether the condition is favorable
+## Future conditions
+* when a user views the future conditions for a city, a 5-day forecast is displayed
+* the displays include date, icon, temperature, wind speed, and humidity
+## Search history
+* a city search will be saved in local storage 
+* the search will be displayed in search history
+* when click will show that city again / in progress
 ## Link to my website  https://ening6649.github.io/weatherdashboard/
 ## screenshot  <img src="./assets/images/weatherdashboard.png   " alt= "ScreenShot" 
